@@ -1,0 +1,34 @@
+name: Terraform deploy
+on:
+  workflow_run:
+    workflows: ['ECS deploy']
+    types:
+      - completed
+  pull_request:
+    types: [opened , synchronize]
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Pass the environment name' 
+        required: true
+        default: "sandbox"
+        type: environment
+
+jobs:
+  tf-plan:
+    name: terraform plan
+    if: (github.event.workflow_run.conclusion == 'success') || (github.event_name == 'workflow_dispatch') || (github.event_name == 'pull_request')
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: echo
+        run: |
+           echo "JSON-:${{ toJson(github.event.workflow_run) }}"
+           echo "####################"
+           echo "ECS-: ${{ github.event.workflow_run.outputs.ECS_ENVIRONMENT }}"
+      - name: Git Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+      

@@ -1,0 +1,34 @@
+name: ECS deploy 
+run-name: Deploying ECS to ${{ inputs.ENVIRONMENT || 'sandbox' }} [${{ github.ref_name }}] by ${{ github.actor }}
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:  
+      environment:
+        description: 'Pass the environment name'
+        required: true
+        default: "sandbox"
+        type: environment
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
+defaults:
+  run:
+    shell: bash
+    working-directory: .
+jobs:
+  test:
+    runs-on: [ubuntu-latest]
+    environment: ${{ inputs.ENVIRONMENT || 'sandbox' }}
+    outputs:
+      ECS_ENVIRONMENT: ${{ steps.echo_print.outputs.ECS_ENVIRONMENT }}
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      - name: Echo print
+        id: echo_print
+        run: |
+          echo "${{ vars.ENVIRONMENT }}"
+          echo "ECS_ENVIRONMENT=${{ inputs.environment || 'sandbox'}}" >> $GITHUB_OUTPUT
