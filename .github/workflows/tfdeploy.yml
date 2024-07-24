@@ -32,4 +32,23 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
-      
+      - name: Use environment variable from Workflow A
+        run: echo "Running in the ${{ github.event.workflow_run.conclusion }} environment"
+      - name: Retrieve workflow run
+        id: get_run
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const runId = context.workflowRun.id;
+            const { data: workflowRun } = await github.actions.getWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: runId,
+            });
+            const envName = workflowRun.outputs.env_name;
+            return { envName };
+        env:
+          GITHUB_TOKEN: ${{ secrets.SEC_GITHUB_TOKEN }}
+
+      - name: Print environment name
+        run: echo "Environment name is ${{ steps.get_run.outputs.envName }}"
