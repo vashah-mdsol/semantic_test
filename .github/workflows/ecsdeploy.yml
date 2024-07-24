@@ -32,3 +32,4 @@ jobs:
         run: |
           echo "${{ vars.ENVIRONMENT }}"
           echo "ECS_ENVIRONMENT=${{ inputs.environment || 'sandbox'}}" >> $GITHUB_OUTPUT
+          echo "Branch change"

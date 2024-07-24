@@ -27,6 +27,7 @@ jobs:
            echo "JSON-:${{ toJson(github.event.workflow_run) }}"
            echo "####################"
            echo "ECS-: ${{ github.event.workflow_run.outputs.ECS_ENVIRONMENT }}"
+           echo "Branch change"
       - name: Git Checkout
         uses: actions/checkout@v3
         with:
