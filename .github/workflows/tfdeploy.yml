@@ -45,7 +45,7 @@ jobs:
               repo: context.repo.repo,
               run_id: runId,
             });
-            const envName = workflowRun.outputs.env_name;
+            const envName = workflowRun.outputs.ECS_ENVIRONMENT;
             return { envName };
         env:
           GITHUB_TOKEN: ${{ secrets.SEC_GITHUB_TOKEN }}
