@@ -1,5 +1,7 @@
 name: ECS deploy 
 run-name: Deploying ECS to ${{ inputs.ENVIRONMENT || 'sandbox' }} [${{ github.ref_name }}] by ${{ github.actor }}
+env:
+  env_test: ${{ inputs.environment || 'sandbox' }}
 on:
   push:
     branches:
